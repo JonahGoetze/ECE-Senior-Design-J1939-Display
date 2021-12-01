@@ -33,10 +33,10 @@ class VisApp(App):
         print("Starting GPS Reader.")
 
         # set up gps reader
-        self.gps_queue = Queue(1)
-        self.root.gps_queue = self.gps_queue
-        self.gps_reader = GpsReader(self.gps_queue, "gps_log.csv", test)
-        self.gps_reader.start()
+        #self.gps_queue = Queue(1)
+        #self.root.gps_queue = self.gps_queue
+        #self.gps_reader = GpsReader(self.gps_queue, "gps_log.csv", test)
+        #self.gps_reader.start()
 
         #self.obdii_queue = Queue(1)
         #self.root.obdii_queue = self.obdii_queue
