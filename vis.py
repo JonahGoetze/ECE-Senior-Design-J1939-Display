@@ -17,8 +17,9 @@ Config.set('graphics', 'max_fps', 30)
 Config.set('graphics', 'allow_screensaver', 0)
 Config.write()
 
-from gps_reader import GpsReader
+#from gps_reader import GpsReader
 #from obdii_reader import ObdiiReader
+from J1939_reader import J1939Reader
 
 
 
