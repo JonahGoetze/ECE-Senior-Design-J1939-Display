@@ -1,1 +1,1 @@
-# ECE-Senior-Design-J1939-Display
+# CSC-CAN-logger-Display
