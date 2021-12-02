@@ -2,6 +2,7 @@ import random
 import math
 import queue as Q
 
+from kivy.logger import Logger
 from kivy.uix.widget import Widget
 from kivy.properties import NumericProperty, ReferenceListProperty, ObjectProperty, ListProperty, StringProperty
 
@@ -47,7 +48,6 @@ class Gague(Widget):
 
 class Root(Widget):
     speed_gague = ObjectProperty(None)
-    throttle_gague = ObjectProperty(None)
     rpm_gague = ObjectProperty(None)
     temp_gague = ObjectProperty(None)
     count = 0
@@ -55,7 +55,6 @@ class Root(Widget):
     gps_speed = 0
     engine_speed = 0
     rpm = 0
-    throttle = 0
     coolant_temp = 0
 
     def update(self, delta):
@@ -65,7 +64,7 @@ class Root(Widget):
         #    self.count = max(self.count-random.randint(0, 50), 0)
 
         try:
-            self.gps_speed = self.gps_queue.get_nowait()
+            #self.gps_speed = self.gps_queue.get_nowait()
             self.gps_speed = self.gps_speed if self.gps_speed > 3 else 0
         except Q.Empty as e:
             pass # don't change speed
@@ -75,8 +74,7 @@ class Root(Widget):
         #except Q.Empty as e:
         #    pass # don't change speed
 
-
-        self.speed_gague.set_value(self.gps_speed)
-        #self.rpm_gague.set_value(self.rpm)
-        #self.throttle_gague.set_value(self.throttle)
-        #self.temp_gague.set_value(self.coolant_temp)
+        
+        self.speed_gague.set_value(0)
+        self.rpm_gague.set_value(0)
+        self.temp_gague.set_value(0)

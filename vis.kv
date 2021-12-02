@@ -12,7 +12,7 @@
         text: "{1:5d} {0}".format(root.title, root.value) if not isinstance(root.value, float) else "{1:5.2f} {0}".format(root.title, root.value)
         font_size: 24
         font_name: "DejaVuSansMono"
-        pos: root.pos[0]+120, root.pos[1]+100
+        pos: root.pos[0]+120, root.pos[1]-5
         halign: "left"
         valign: "bottom"
         text_size: 300, None
@@ -56,10 +56,9 @@
 
         
 <Root>:
-    #throttle_gague: throttle
     speed_gague: speed
-    #rpm_gague: rpm
-    #temp_gague: temp
+    rpm_gague: rpm
+    temp_gague: temp
 
     canvas.before:
         Color:
@@ -69,47 +68,38 @@
             size: self.size
 
 
-    #Gague:
-        #id: temp
-        #title: "Coolant Temperature"
-        #center: root.width/2, root.height*.15
-        #size: self.parent.width*.8, 60
+    Gague:
+        id: temp
+        title: "Coolant Temp"
+        center: root.width/2, root.height*.50
+        size: self.parent.width*.8, 60
 
-        #threshold_1: 0
-        #threshold_2: 215
-        #threshold_3: 230
-        #max_value: 250
+        threshold_1: 0
+        threshold_2: 215
+        threshold_3: 230
+        max_value: 250
 
-    #Gague:
-        #id: rpm
-        #title: "RPM"
-        #center: root.width/2, root.height*.35
-        #size: self.parent.width*.8, 60
+    Gague:
+        id: rpm
+        title: "RPM"
+        center: root.width/2, root.height*.75
+        size: self.parent.width*.8, 60
 
-        #threshold_1: 0
-        #threshold_2: 4250
-        #threshold_3: 4500
-        #max_value: 4600
+        threshold_1: 0
+        threshold_2: 4250
+        threshold_3: 4500
+        max_value: 4600
 
     Gague:
         id: speed
-        title: "MPH"
-        center: root.width/2, root.height*.5
-        size: self.parent.width*.8, 200
+        title: "Voltage"
+        center: root.width/2, root.height*.25
+        size: self.parent.width*.8, 60
         
 
         threshold_1: 0
         threshold_2: 0
-        threshold_3: 0
-        max_value: 55
+        threshold_3: 15
+        max_value: 16
 
-    #Gague:
-        #id: throttle
-        #title: "Throttle%"
-        #center: root.width/2, root.height*.75
-        #size: self.parent.width*.8, 60
-
-        #threshold_1: 0
-        #threshold_2: 0
-        #threshold_3: 0
-        #max_value: 100
+    

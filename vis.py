@@ -10,16 +10,16 @@ from widgets import Root
 from kivy.config import Config
 Config.set('graphics', 'width', '800')
 Config.set('graphics', 'height', '480')
-Config.set('graphics', 'fullsreen', 1)
+Config.set('graphics', 'fullsreen', 0) # set 1 for fullscreen 0 for windowed dev purposes
 Config.set('graphics', 'show_cursor', 0)
-Config.set('graphics', 'borderless', 1)
+Config.set('graphics', 'borderless', 0) # change to 1 for final version
 Config.set('graphics', 'max_fps', 30)
 Config.set('graphics', 'allow_screensaver', 0)
 Config.write()
 
 #from gps_reader import GpsReader
 #from obdii_reader import ObdiiReader
-from J1939_reader import J1939Reader
+#from J1939_reader import J1939Reader
 
 
 
@@ -46,7 +46,7 @@ class VisApp(App):
 
 
     def on_stop(self):
-        self.gps_reader.shutdown()
+        pass
         #self.obdii_reader.shutdown()
 
 
