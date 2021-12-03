@@ -1,10 +1,10 @@
 import random
 import math
-import queue as Q
 
 from kivy.logger import Logger
 from kivy.uix.widget import Widget
 from kivy.properties import NumericProperty, ReferenceListProperty, ObjectProperty, ListProperty, StringProperty
+from queue_manager import QueueManager
 
 
 class Gague(Widget):
@@ -52,29 +52,29 @@ class Root(Widget):
     temp_gague = ObjectProperty(None)
     count = 0
 
-    gps_speed = 0
     engine_speed = 0
     rpm = 0
     coolant_temp = 0
 
+    queue_manager = QueueManager.load()
+
     def update(self, delta):
-        #if self.count < 100:
-        #    self.count = min(self.count+1, 100)
-        #else:
-        #    self.count = max(self.count-random.randint(0, 50), 0)
+        """
+        Note: Kivy should magically patch in the "self" from "vis.py" which should contain self.queue_manater for access
+        to the event queues.
+        """
 
-        try:
-            #self.gps_speed = self.gps_queue.get_nowait()
-            self.gps_speed = self.gps_speed if self.gps_speed > 3 else 0
-        except Q.Empty as e:
-            pass # don't change speed
+        # Update speed
+        updated_speed = self.queue_manager.speed.get_or_else(self.engine_speed)
+        self.engine_speed = updated_speed if updated_speed > 3 else 0
 
-        #try:
-        #    self.engine_speed, self.rpm, self.throttle, self.coolant_temp = self.obdii_queue.get_nowait()
-        #except Q.Empty as e:
-        #    pass # don't change speed
+        # Update rpm
+        self.rpm = self.queue_manager.rpm.get_or_else(self.rpm)
+
+        # update temp
+        self.coolant_temp = self.queue_manager.temp.get_or_else(self.coolant_temp)
 
         
-        self.speed_gague.set_value(0)
-        self.rpm_gague.set_value(0)
-        self.temp_gague.set_value(0)
+        self.speed_gague.set_value(self.engine_speed)
+        self.rpm_gague.set_value(self.rpm)
+        self.temp_gague.set_value(self.coolant_temp)
