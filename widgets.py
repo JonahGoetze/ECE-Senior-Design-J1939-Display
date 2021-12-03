@@ -65,7 +65,7 @@ class Root(Widget):
         """
 
         # Update speed
-        updated_speed = self.queue_manager.speed.get_or_else(self.engine_speed)
+        updated_speed = self.queue_manager.voltage.get_or_else(self.engine_speed)
         self.engine_speed = updated_speed if updated_speed > 3 else 0
 
         # Update rpm

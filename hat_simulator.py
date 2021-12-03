@@ -5,23 +5,23 @@ import random
 class HatSimulator(HatAdapter):
     def __init__(self, queue_manager):
         super().__init__(queue_manager)
-        self.speed = 0
+        self.voltage = 0
         self.rpm = 0
         self.temp = 0
 
-        self.max_speed = 16
+        self.max_voltage = 16
         self.max_rpm = 4600
         self.max_temp = 250
 
-        self.target_speed = 0
+        self.target_voltage = 0
         self.target_rpm = 0
         self.target_temp = 0
 
 
     def loop(self):
         # update speed
-        (self.speed, self.target_speed) = self._interpolate(self.speed, self.target_speed, self.max_speed, 2)
-        self.queue_manager.speed.put(self.speed)
+        (self.voltage, self.target_voltage) = self._interpolate(self.voltage, self.target_voltage, self.max_voltage, 2)
+        self.queue_manager.voltage.put(self.voltage)
 
         # update rpm
         (self.rpm, self.target_rpm) = self._interpolate(self.rpm, self.target_rpm, self.max_rpm, 40)

@@ -30,7 +30,7 @@ class QueueManager(collections.UserDict):
 
     def __init__(self):
         self.rpm = self._build_queue()
-        self.speed = self._build_queue()
+        self.voltage = self._build_queue()
         self.temp = self._build_queue()
 
     def _build_queue(self):
