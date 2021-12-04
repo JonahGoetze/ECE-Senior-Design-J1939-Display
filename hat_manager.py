@@ -21,9 +21,11 @@ class HatManager(HatAdapter):
         sh.setLevel(self.log_level)
         self.log.addHandler(sh)
         self.PGN_whitelist = [PGN.EEC1, PGN.ET1, PGN.VEP1] #PGN filter
+        self.led_state = False
 
     def loop(self):
-        pass
+        self.led_state = not self.led_state
+        GPIO.output(self.led,self.led_state)
 
     def startup_hook(self):
 
@@ -33,11 +35,11 @@ class HatManager(HatAdapter):
         self.log.info("Initializing")
         os.system("sudo /sbin/ip link set can0 up type can bitrate 250000")
 
-        led = 22
+        self.led = 22
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
-        GPIO.setup(led,GPIO.OUT)
-        GPIO.output(led,True)
+        GPIO.setup(self.led,GPIO.OUT)
+        GPIO.output(self.led,True)
 
         # create the ElectronicControlUnit (one ECU can hold multiple ControllerApplications)
         self.ecu = j1939.ElectronicControlUnit()
@@ -51,7 +53,7 @@ class HatManager(HatAdapter):
     def shutdown_hook(self):
         self.log.info("Deinitializing")
         self.ecu.disconnect()
-        GPIO.output(led,False)
+        GPIO.output(self.led,False)
         os.system("sudo /sbin/ip link set can0 down")
 
     def on_message(self, priority, pgn, sa, timestamp, data):
@@ -78,11 +80,16 @@ class HatManager(HatAdapter):
             engspd = round(engspd) 
             self.queue_manager.rpm.put(engspd)
         elif pgn == PGN.ET1:
-            pass
+            coolnttemp = int.from_bytes(data[0],byteorder="little",signed = False)
+            coolnttemp = (coolnttemp*(9/5))+32
+            coolnttemp = round(coolnttemp,1)
+            self.queue_manager.temp.put(coolnttemp)
         elif pgn == PGN.VEP1:
-            pass
+            word = data[4:6]
+            voltage = int.from_bytes(word,byteorder="little",signed = False)
+            voltage *= 0.05 # Voltage resolution
+            voltage = round(voltage,2) 
+            self.queue_manager.rpm.put(voltage)
         else:
             pass
-
-        data.hex()
-        self.log.debug("PGN {} length {} Data {}".format(pgn, len(data), data.hex()))
+        self.log.debug(f"PGN {pgn} length {len(data)} Data {data.hex()}")
