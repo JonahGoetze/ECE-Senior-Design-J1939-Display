@@ -89,7 +89,7 @@ class HatManager(HatAdapter):
             voltage = int.from_bytes(word,byteorder="little",signed = False)
             voltage *= 0.05 # Voltage resolution
             voltage = round(voltage,2) 
-            self.queue_manager.rpm.put(voltage)
+            self.queue_manager.voltage.put(voltage)
         else:
             pass
         self.log.debug(f"PGN {pgn} length {len(data)} Data {data.hex()}")
