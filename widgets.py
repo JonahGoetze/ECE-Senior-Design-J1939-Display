@@ -28,9 +28,8 @@ class Gague(Widget):
     def set_value(self, value):
         self.value = value
         percent = self.value / self.max_value
+        percent = max(min(percent,1.0),0.0)
         self.current_gague_width = math.floor(self.width * percent)
-
-        percent
 
         if (self.threshold_3 != 0 and
             percent >= (self.threshold_3/self.max_value)):

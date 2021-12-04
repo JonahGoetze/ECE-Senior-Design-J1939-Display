@@ -9,7 +9,7 @@ Config.set('graphics', 'borderless', 1) # change to 1 for final version
 Config.set('graphics', 'allow_screensaver', 0)
 #Config.set('modules', 'monitor', 0) # comment to hide fps
 #Config.set('modules', '', '') # comment to hide fps
-#Config.set('kivy','exit_on_escape', 0)
+#Config.set('kivy','exit_on_escape', 0) # uncomment on windows if killing itself at startup
 
 
 import sys
