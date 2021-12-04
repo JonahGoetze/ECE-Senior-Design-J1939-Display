@@ -75,7 +75,7 @@ class HatManager(HatAdapter):
             word = data[3:5]
             engspeed = int.from_bytes(word,byteorder="little",signed = False) # convert bytearray to int
             engspeed *= 0.125 # engspeed resolution 
-            self.queue_manager.speed.put(engspeed)
+            self.queue_manager.rpm.put(engspeed)
         elif pgn == PGN.ET1:
             pass
         elif pgn == PGN.VEP1:
