@@ -9,7 +9,7 @@
             pos: self.pos
             size: self.size
     Label:
-        text: "{1:5d} {0}".format(root.title, root.value) if not isinstance(root.value, float) else "{1:5.2f} {0}".format(root.title, root.value)
+        text: "{0} {1:5d}".format(root.title, root.value) if not isinstance(root.value, float) else "{0} {1:5.2f}".format(root.title, root.value)
         font_size: 24
         #font_name: "DejaVuSansMono"
         pos: root.pos[0]+120, root.pos[1]-5
