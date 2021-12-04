@@ -80,6 +80,7 @@ class HatManager(HatAdapter):
             engspd = round(engspd) 
             self.queue_manager.rpm.put(engspd)
         elif pgn == PGN.ET1:
+            self.log.debug(f"found ect signal, data: {data[0]}")
             coolnttemp = int.from_bytes(data[0],byteorder="little",signed = False)
             coolnttemp = (coolnttemp*(9/5))+32
             coolnttemp = round(coolnttemp,1)
