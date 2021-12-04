@@ -1,3 +1,5 @@
+import os
+os.environ["KIVY_NO_CONFIG"] = "1"
 from kivy.config import Config
 Config.set('graphics', 'width', '800')
 Config.set('graphics', 'height', '480')
