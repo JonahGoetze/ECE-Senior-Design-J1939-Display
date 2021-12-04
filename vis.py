@@ -3,7 +3,7 @@ os.environ["KIVY_NO_CONFIG"] = "1"
 from kivy.config import Config
 Config.set('graphics', 'width', '800')
 Config.set('graphics', 'height', '480')
-Config.set('graphics', 'fullscreen', 0) # set 1 for fullscreen 0 for windowed dev purposes
+Config.set('graphics', 'fullscreen', 1) # set 1 for fullscreen 0 for windowed dev purposes
 Config.set('graphics', 'show_cursor', 0)
 Config.set('graphics', 'borderless', 1) # change to 1 for final version
 Config.set('graphics', 'allow_screensaver', 0)
