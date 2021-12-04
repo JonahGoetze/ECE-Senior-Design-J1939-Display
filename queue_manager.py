@@ -36,22 +36,4 @@ class QueueManager(collections.UserDict):
     def _build_queue(self):
         return EasyQueue(Queue(10))
 
-    #@property
-    #def rpm(self):
-    #    if self._rpm is None:
-    #        self._rpm = self._build_queue()
-    #    return self._rpm
-
-    #@property
-    #def speed(self):
-    #    if self._speed is None:
-    #        self._speed = self._build_queue()
-    #    return self._speed
-
-    #@property
-    #def temp(self):
-    #    if self._temp is None:
-    #        self._temp = self._build_queue()
-    #    return self._temp
-
 

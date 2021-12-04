@@ -56,9 +56,9 @@
 
         
 <Root>:
-    speed_gague: speed
-    rpm_gague: rpm
-    temp_gague: temp
+    voltage_gauge: voltage
+    rpm_gauge: rpm
+    temp_gauge: temp
 
     canvas.before:
         Color:
@@ -67,6 +67,12 @@
             pos: self.pos
             size: self.size
 
+    Button:
+        id: exit_button
+        opacity: 0
+        text: "Exit"
+        on_press: app.stop()
+        center: 0,0
 
     Gague:
         id: temp
@@ -91,7 +97,7 @@
         max_value: 4600
 
     Gague:
-        id: speed
+        id: voltage
         title: "Voltage"
         center: root.width/2, root.height*.25
         size: self.parent.width*.8, 60

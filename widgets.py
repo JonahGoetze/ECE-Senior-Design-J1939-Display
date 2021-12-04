@@ -47,12 +47,12 @@ class Gague(Widget):
 
 
 class Root(Widget):
-    speed_gague = ObjectProperty(None)
-    rpm_gague = ObjectProperty(None)
-    temp_gague = ObjectProperty(None)
+    voltage_gauge = ObjectProperty(None)
+    rpm_gauge = ObjectProperty(None)
+    temp_gauge = ObjectProperty(None)
     count = 0
 
-    engine_speed = 0
+    voltage = 0
     rpm = 0
     coolant_temp = 0
 
@@ -63,10 +63,9 @@ class Root(Widget):
         Note: Kivy should magically patch in the "self" from "vis.py" which should contain self.queue_manater for access
         to the event queues.
         """
-
-        # Update speed
-        updated_speed = self.queue_manager.voltage.get_or_else(self.engine_speed)
-        self.engine_speed = updated_speed if updated_speed > 3 else 0
+        # Update voltage
+        updated_voltage = self.queue_manager.voltage.get_or_else(self.voltage)
+        self.voltage = updated_voltage if updated_voltage > 3 else 0
 
         # Update rpm
         self.rpm = self.queue_manager.rpm.get_or_else(self.rpm)
@@ -74,7 +73,6 @@ class Root(Widget):
         # update temp
         self.coolant_temp = self.queue_manager.temp.get_or_else(self.coolant_temp)
 
-        
-        self.speed_gague.set_value(self.engine_speed)
-        self.rpm_gague.set_value(self.rpm)
-        self.temp_gague.set_value(self.coolant_temp)
+        self.voltage_gauge.set_value(self.voltage)
+        self.rpm_gauge.set_value(self.rpm)
+        self.temp_gauge.set_value(self.coolant_temp)
