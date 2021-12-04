@@ -1,3 +1,15 @@
+from kivy.config import Config
+Config.set('graphics', 'width', '800')
+Config.set('graphics', 'height', '480')
+Config.set('graphics', 'fullscreen', 0) # set 1 for fullscreen 0 for windowed dev purposes
+Config.set('graphics', 'show_cursor', 0)
+Config.set('graphics', 'borderless', 1) # change to 1 for final version
+Config.set('graphics', 'allow_screensaver', 0)
+#Config.set('modules', 'monitor', 0) # comment to hide fps
+#Config.set('modules', '', '') # comment to hide fps
+#Config.set('kivy','exit_on_escape', 0)
+Config.write()
+
 import sys
 from queue_manager import QueueManager
 from hat_adapter_loader import HatAdapterLoader
@@ -12,16 +24,6 @@ from kivy.logger import Logger, LOG_LEVELS
 
 Logger.setLevel(LOG_LEVELS["debug"])
 
-from kivy.config import Config
-Config.set('graphics', 'width', '800')
-Config.set('graphics', 'height', '480')
-Config.set('graphics', 'fullscreen', 1) # set 1 for fullscreen 0 for windowed dev purposes
-Config.set('graphics', 'show_cursor', 0)
-Config.set('graphics', 'borderless', 1) # change to 1 for final version
-Config.set('graphics', 'allow_screensaver', 0)
-#Config.set('modules', 'monitor', '') # comment to hide fps
-#Config.set('kivy','exit_on_escape', 0)
-Config.write()
 
 class VisApp(App):
     def build(self):
