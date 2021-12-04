@@ -11,6 +11,9 @@ class HatManager(HatAdapter):
         super().__init__(queue_manager)
         self.log = logging.getLogger("hat_manager")
         self.log.setLevel(logging.DEBUG)
+        sh = logging.StreamHandler()
+        sh.setLevel(logging.DEBUG)
+        self.log.addHandler(sh)
 
     def loop(self):
         pass

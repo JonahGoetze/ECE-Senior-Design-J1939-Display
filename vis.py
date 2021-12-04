@@ -29,8 +29,6 @@ Config.write()
 #from obdii_reader import ObdiiReader
 #from J1939_reader import J1939Reader
 
-
-
 class VisApp(App):
     def build(self):
         root = Root()
@@ -39,28 +37,14 @@ class VisApp(App):
         return root
 
     def on_start(self):
-        print("Starting GPS Reader.")
 
         self.queue_manager = QueueManager.load()
         loader = HatAdapterLoader()
         self.hat = loader.load()
         self.hat.start()
 
-        # set up gps reader
-        #self.gps_queue = Queue(1)
-        #self.root.gps_queue = self.gps_queue
-        #self.gps_reader = GpsReader(self.gps_queue, "gps_log.csv", test)
-        #self.gps_reader.start()
-
-        #self.obdii_queue = Queue(1)
-        #self.root.obdii_queue = self.obdii_queue
-        #self.obdii_reader = ObdiiReader(self.obdii_queue, "obdii_log.csv", test)
-        #self.obdii_reader.start()
-
-
     def on_stop(self):
         self.hat.stop()
-
 
 if __name__ == '__main__':
     VisApp().run()
