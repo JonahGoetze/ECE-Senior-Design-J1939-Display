@@ -5,7 +5,6 @@ import RPi.GPIO as GPIO
 import logging
 import j1939
 from enum import IntEnum
-from math import round
 
 class PGN (IntEnum):
     EEC1 = 61444
