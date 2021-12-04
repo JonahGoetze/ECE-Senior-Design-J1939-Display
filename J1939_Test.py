@@ -28,7 +28,6 @@ def on_message(priority, pgn, sa, timestamp, data):
     :param bytearray data:
         Data of the PDU
     """
-    #pretty_data = data.decode()
     data.hex()
     print("PGN {} length {} Data {}".format(pgn, len(data), data.hex()))
 
