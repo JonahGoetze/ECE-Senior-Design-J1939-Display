@@ -19,7 +19,7 @@ Config.set('graphics', 'fullscreen', 1) # set 1 for fullscreen 0 for windowed de
 Config.set('graphics', 'show_cursor', 0)
 Config.set('graphics', 'borderless', 1) # change to 1 for final version
 Config.set('graphics', 'allow_screensaver', 0)
-Config.set('modules', 'monitor', '') # comment to hide fps
+#Config.set('modules', 'monitor', '') # comment to hide fps
 #Config.set('kivy','exit_on_escape', 0)
 Config.write()
 
