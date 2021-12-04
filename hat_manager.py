@@ -4,24 +4,31 @@ import os
 import RPi.GPIO as GPIO
 import logging
 import j1939
+from enum import IntEnum
 
+class PGN (IntEnum):
+    EEC1 = 61444
+    ET1 = 65262
+    VEP1 = 65271
 
 class HatManager(HatAdapter):
     def __init__(self, queue_manager):
         super().__init__(queue_manager)
+        self.log_level = logging.DEBUG # change to INFO for normal use, DEBUG for testing purposes
         self.log = logging.getLogger("hat_manager")
-        self.log.setLevel(logging.DEBUG)
+        self.log.setLevel(self.log_level)
         sh = logging.StreamHandler()
-        sh.setLevel(logging.DEBUG)
+        sh.setLevel(self.log_level)
         self.log.addHandler(sh)
+        self.PGN_whitelist = [PGN.EEC1, PGN.ET1, PGN.VEP1] #PGN filter
 
     def loop(self):
         pass
 
     def startup_hook(self):
 
-        logging.getLogger('j1939').setLevel(logging.DEBUG)
-        logging.getLogger('can').setLevel(logging.DEBUG)
+        logging.getLogger('j1939').setLevel(self.log_level)
+        logging.getLogger('can').setLevel(self.log_level)
 
         self.log.info("Initializing")
         os.system("sudo /sbin/ip link set can0 up type can bitrate 250000")
@@ -61,5 +68,20 @@ class HatManager(HatAdapter):
         :param bytearray data:
             Data of the PDU
         """
+        if pgn not in self.PGN_whitelist:
+            self.log.debug(f"PGN ignored: {pgn}")
+            return
+        elif pgn == PGN.EEC1:
+            word = data[3:5]
+            engspeed = int.from_bytes(word,byteorder="little",signed = False) # convert bytearray to int
+            engspeed *= 0.125 # engspeed resolution 
+            self.queue_manager.speed.put(engspeed)
+        elif pgn == PGN.ET1:
+            pass
+        elif pgn == PGN.VEP1:
+            pass
+        else:
+            pass
+
         data.hex()
         self.log.debug("PGN {} length {} Data {}".format(pgn, len(data), data.hex()))
