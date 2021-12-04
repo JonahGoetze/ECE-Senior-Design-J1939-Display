@@ -14,7 +14,7 @@ class PGN (IntEnum):
 class HatManager(HatAdapter):
     def __init__(self, queue_manager):
         super().__init__(queue_manager)
-        self.log_level = logging.DEBUG # change to INFO for normal use, DEBUG for testing purposes
+        self.log_level = logging.INFO # change to INFO for normal use, DEBUG for testing purposes
         self.log = logging.getLogger("hat_manager")
         self.log.setLevel(self.log_level)
         sh = logging.StreamHandler()
