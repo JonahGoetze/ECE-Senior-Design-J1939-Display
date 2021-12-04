@@ -5,6 +5,7 @@ import RPi.GPIO as GPIO
 import logging
 import j1939
 from enum import IntEnum
+from math import round
 
 class PGN (IntEnum):
     EEC1 = 61444
@@ -73,9 +74,10 @@ class HatManager(HatAdapter):
             return
         elif pgn == PGN.EEC1:
             word = data[3:5]
-            engspeed = int.from_bytes(word,byteorder="little",signed = False) # convert bytearray to int
-            engspeed *= 0.125 # engspeed resolution 
-            self.queue_manager.rpm.put(engspeed)
+            engspd = int.from_bytes(word,byteorder="little",signed = False) # convert bytearray to int
+            engspd *= 0.125 # engspeed resolution
+            engspd = round(engspd) 
+            self.queue_manager.rpm.put(engspd)
         elif pgn == PGN.ET1:
             pass
         elif pgn == PGN.VEP1:
