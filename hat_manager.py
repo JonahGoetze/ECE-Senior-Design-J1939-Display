@@ -90,7 +90,7 @@ class HatManager(HatAdapter):
 
     def on_raw_can_message(self, message):
         if message.arbitration_id == PID.EMS01:
-            word = message.data[1:3]
+            word = message.data[0:2]
             engspd = int.from_bytes(word,byteorder="big",signed = False) # convert bytearray to int
             engspd = round(engspd) 
             self.queue_manager.rpm.put(engspd)
