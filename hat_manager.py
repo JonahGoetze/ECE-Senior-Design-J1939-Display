@@ -28,10 +28,15 @@ class HatManager(HatAdapter):
         self.PGN_whitelist = [] #[PGN.EEC1, PGN.ET1, PGN.VEP1] #PGN filter
         self.PID_whitelist = [PID.EMS01, PID.EMS12]
         self.led_state = False
+        self.led_count = 0
 
     def loop(self):
-        self.led_state = not self.led_state
-        GPIO.output(self.led,self.led_state)
+        if self.led_count < 100:
+            self.led_count += 1
+        else:
+            self.led_state = not self.led_state
+            GPIO.output(self.led,self.led_state)
+            self.led_count = 0
 
         # check to see if we have a new can message
         message = self.can_listener.get_message(timeout=1e-10) # 0 for non-blocking
