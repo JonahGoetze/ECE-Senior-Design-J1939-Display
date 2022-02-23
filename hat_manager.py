@@ -80,12 +80,12 @@ class HatManager(HatAdapter):
 
     def on_raw_can_message(self, message):
         if message.arbitration_id == PID.EMS01:
-            word = data[0:2]
+            word = message.data[0:2]
             engspd = int.from_bytes(word,byteorder="big",signed = False) # convert bytearray to int
             engspd = round(engspd) 
             self.queue_manager.rpm.put(engspd)
         elif message.arbitration_id == PID.EMS12:
-            coolnttemp = data[0:2]
+            coolnttemp = message.data[0:2]
             coolnttemp = (coolnttemp*0.625)-10
             coolnttemp = (coolnttemp*(9/5))+32
             coolnttemp = round(coolnttemp,2)
