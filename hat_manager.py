@@ -32,7 +32,7 @@ class HatManager(HatAdapter):
         self.led_count = 0
 
     def loop(self):
-        if self.led_count < 100:
+        if self.led_count < 1000:
             self.led_count += 1
         else:
             self.led_state = not self.led_state
