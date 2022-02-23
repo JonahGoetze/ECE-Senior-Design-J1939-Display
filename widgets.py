@@ -52,6 +52,7 @@ class Root(Widget):
     count = 0
 
     gps_speed = 0
+    gps_speed
     rpm = 0
     coolant_temp = 0
 
@@ -65,7 +66,7 @@ class Root(Widget):
         # Update voltage
         updated_gps_speed = self.queue_manager.gps_speed.get_or_else(self.gps_speed)
         if updated_gps_speed == -1:
-            self.gps_speed = "Acquiring GPS Fix"
+            self.gps_speed = -1 #"Acquiring GPS Fix"
         elif updated_gps_speed > 3:
             self.gps_speed = updated_gps_speed
         else:
