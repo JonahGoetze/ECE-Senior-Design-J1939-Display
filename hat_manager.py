@@ -62,7 +62,7 @@ class HatManager(HatAdapter):
         self.ecu.subscribe(self.on_j1939_message)
 
         # can interface setup
-        self.can_bus = can.interface.Bus(bustype='socketcan', channel='can0')
+        self.can_bus = can.interface.Bus(bustype='socketcan', channel='can0', bitrate=500000)
         can_filters = [{"can_id": i, "can_mask": 0xF, "extended": False} for i in self.PID_whitelist]
         self.can_bus.set_filters(can_filters)
         self.can_listener = can.BufferedReader()
