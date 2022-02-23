@@ -33,7 +33,6 @@ class HatAdapter(Process, ABC):
             self.startup_hook()
             while not self.exit.is_set():
                 self.loop()
-                sleep(0.1)
             self.shutdown_hook()
         except Exception as e:
             self.log.error("Unhandled exception:", e)
