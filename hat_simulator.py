@@ -20,7 +20,7 @@ class HatSimulator(HatAdapter):
 
     def loop(self):
         # update speed
-        (self.gps_speed, self.target_gps_speed) = self._interpolate(self.gps_speed, self.target_gps_speed, self.max_gps_speed, 2)
+        (self.gps_speed, self.target_gps_speed) = self._interpolate(self.gps_speed, self.target_gps_speed, self.max_gps_speed, 2, -1)
         self.queue_manager.gps_speed.put(self.gps_speed)
 
         # update rpm
@@ -31,9 +31,9 @@ class HatSimulator(HatAdapter):
         (self.temp, self.target_temp) = self._interpolate(self.temp, self.target_temp, self.max_temp, 20)
         self.queue_manager.temp.put(self.temp)
 
-    def _interpolate(self, value, target, max_value, step):
+    def _interpolate(self, value, target, max_value, step, min_value=0):
         if value == target:
-            target = random.randint(0, max_value)
+            target = random.randint(min_value, max_value)
         if value > target:
             if value - step < target:
                 value -= 1

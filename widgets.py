@@ -10,6 +10,8 @@ from queue_manager import QueueManager
 class Gague(Widget):
     max_value = NumericProperty(1)
     value = NumericProperty(0)
+    note = StringProperty()
+    display_value = StringProperty()
     current_gague_width = NumericProperty(100)
 
     threshold_1 = NumericProperty(65)
@@ -42,6 +44,25 @@ class Gague(Widget):
             self.bar_color = self.threshold_1_color
         else:
             self.bar_color = self.default_bar_color
+        self.update_display_value()
+
+    def set_note(self, n):
+        self.note = n
+        self.update_display_value()
+
+    def clear_note(self):
+        self.note = ""
+        self.update_display_value()
+
+    def update_display_value(self):
+        if self.note != "":
+            self.display_value = f"{self.title}: {self.note}"
+        else:
+            self.display_value = (
+                "{0} {1:5d}".format(self.title, self.value)
+                if not isinstance(self.value, float)
+                else "{0} {1:5.2f}".format(self.title, self.value)
+            )
 
 
 
@@ -66,11 +87,14 @@ class Root(Widget):
         # Update voltage
         updated_gps_speed = self.queue_manager.gps_speed.get_or_else(self.gps_speed)
         if updated_gps_speed == -1:
-            self.gps_speed = -1 #"Acquiring GPS Fix"
+            self.gps_speed = 0
+            self.gps_speed_gauge.set_note("Acquiring GPS Fix")
         elif updated_gps_speed > 3:
             self.gps_speed = updated_gps_speed
+            self.gps_speed_gauge.clear_note()
         else:
             self.gps_speed = updated_gps_speed  #0
+            self.gps_speed_gauge.clear_note()
 
         # Update rpm
         self.rpm = self.queue_manager.rpm.get_or_else(self.rpm)
