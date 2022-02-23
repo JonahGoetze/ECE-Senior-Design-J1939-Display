@@ -140,4 +140,4 @@ class HatManager(HatAdapter):
             self.queue_manager.voltage.put(voltage)
         else:
             pass
-        self.log.debug(f"PGN {pgn} length {len(data)} Data {data.hex()}")
+        #self.log.debug(f"PGN {pgn} length {len(data)} Data {data.hex()}")
