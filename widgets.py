@@ -27,9 +27,9 @@ class TextGague(Widget):
             self.display_value = f"{self.title}: {self.note}"
         else:
             self.display_value = (
-                "{0} {1:5d}".format(self.title, self.value)
+                "{0}{1:5d}".format(self.title, self.value)
                 if not isinstance(self.value, float)
-                else "{0} {1:5.2f}".format(self.title, self.value)
+                else "{0}{1:5.2f}".format(self.title, self.value)
             )
 
 class Gague(Widget):
