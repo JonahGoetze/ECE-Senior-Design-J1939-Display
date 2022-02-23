@@ -119,7 +119,7 @@ class HatManager(HatAdapter):
             Data of the PDU
         """
         if pgn not in self.PGN_whitelist:
-            self.log.debug(f"PGN ignored: {pgn}")
+            #self.log.debug(f"PGN ignored: {pgn}")
             return
         elif pgn == PGN.EEC1:
             word = data[3:5]
