@@ -20,7 +20,7 @@ class PID (IntEnum):
 class HatManager(HatAdapter):
     def __init__(self, queue_manager):
         super().__init__(queue_manager)
-        self.log_level = logging.DEBUG # change to INFO for normal use, DEBUG for testing purposes
+        self.log_level = logging.INFO # change to INFO for normal use, DEBUG for testing purposes
         self.log = logging.getLogger("hat_manager")
         self.log.setLevel(self.log_level)
         sh = logging.StreamHandler()
@@ -91,16 +91,12 @@ class HatManager(HatAdapter):
             self.queue_manager.rpm.put(engspd)
         elif message.arbitration_id == PID.EMS12:
             coolnttemp = message.data[0]
-            #word = message.data[1:2]
-            #self.log.debug(f"test:{word.hex()}")
-            #coolnttemp = int.from_bytes(word,byteorder="big",signed = False) # convert bytearray to int
             coolnttemp = (coolnttemp*0.625)-10
-            #coolnttemp = (coolnttemp*(9/5))+32
-            #coolnttemp = round(coolnttemp,2)
+            coolnttemp = (coolnttemp*(9/5))+32
+            coolnttemp = round(coolnttemp,2)
             self.queue_manager.temp.put(coolnttemp)
             pass
         else:
-            #self.log.trace(f"unhandled CAN Msg; {message}")
             pass
 
             
