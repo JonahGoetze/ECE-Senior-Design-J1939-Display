@@ -12,6 +12,10 @@ class PGN (IntEnum):
     ET1 = 65262
     VEP1 = 65271
 
+class PID (IntEnum):
+    EMS01 = 768
+    EMS12 = 779
+
 class HatManager(HatAdapter):
     def __init__(self, queue_manager):
         super().__init__(queue_manager)
@@ -21,7 +25,8 @@ class HatManager(HatAdapter):
         sh = logging.StreamHandler()
         sh.setLevel(self.log_level)
         self.log.addHandler(sh)
-        self.PGN_whitelist = [PGN.EEC1, PGN.ET1, PGN.VEP1] #PGN filter
+        self.PGN_whitelist = [] #[PGN.EEC1, PGN.ET1, PGN.VEP1] #PGN filter
+        self.PID_whitelist = [PID.EMS01, PID.EMS12]
         self.led_state = False
 
     def loop(self):
@@ -39,7 +44,7 @@ class HatManager(HatAdapter):
         logging.getLogger('can').setLevel(self.log_level)
 
         self.log.info("Initializing")
-        os.system("sudo /sbin/ip link set can0 up type can bitrate 250000")
+        os.system("sudo /sbin/ip link set can0 up type can bitrate 500000")
 
         self.led = 22
         GPIO.setmode(GPIO.BCM)
@@ -57,7 +62,9 @@ class HatManager(HatAdapter):
         self.ecu.subscribe(self.on_j1939_message)
 
         # can interface setup
-        self.can_bus = can.interface.Bus()
+        self.can_bus = can.interface.Bus(bustype='socketcan', channel='can0')
+        can_filters = [{"can_id": i, "can_mask": 0xF, "extended": False} for i in self.PID_whitelist]
+        self.can_bus.set_filters(can_filters)
         self.can_listener = can.BufferedReader()
         self.can_notifier = can.Notifier(self.can_bus, [self.can_listener])
 
@@ -72,7 +79,22 @@ class HatManager(HatAdapter):
         self.can_bus.shutdown()
 
     def on_raw_can_message(self, message):
-        pass
+        if message.arbitration_id == PID.EMS01:
+            word = data[0:2]
+            engspd = int.from_bytes(word,byteorder="big",signed = False) # convert bytearray to int
+            engspd = round(engspd) 
+            self.queue_manager.rpm.put(engspd)
+        elif message.arbitration_id == PID.EMS12:
+            coolnttemp = data[0:2]
+            coolnttemp = (coolnttemp*0.625)-10
+            coolnttemp = (coolnttemp*(9/5))+32
+            coolnttemp = round(coolnttemp,2)
+            self.queue_manager.temp.put(coolnttemp)
+            pass
+        else:
+            self.log.trace(f"unhandled CAN Msg; {message}")
+
+            
 
     def on_j1939_message(self, priority, pgn, sa, timestamp, data):
         """Receive incoming messages from the bus
