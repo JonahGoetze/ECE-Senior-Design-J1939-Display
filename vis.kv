@@ -62,12 +62,12 @@
             size: self.size
     Label:
         text: root.display_value
-        font_size: 72
+        font_size: 140
         #font_name: "DejaVuSansMono"
-        pos: root.pos[0]+320, root.pos[1]+50
+        pos: root.pos[0]+400, root.pos[1]+50
         halign: "left"
         valign: "bottom"
-        text_size: 500, None
+        text_size: 700, None
 
 
         
@@ -114,9 +114,9 @@
 
     TextGague:
         id: gps_speed
-        title: "Speed"
+        title: "MPH"
         center: root.width/2, root.height*.75
-        size: self.parent.width*.75, 200
+        size: self.parent.width*.95, 200
         
 
 

@@ -113,7 +113,7 @@ class Root(Widget):
         updated_gps_speed = self.queue_manager.gps_speed.get_or_else(self.gps_speed)
         if updated_gps_speed == -1:
             self.gps_speed = 0
-            self.gps_speed_gauge.set_note("Acquiring GPS Fix")
+            self.gps_speed_gauge.set_note("GPS Fix")
         elif updated_gps_speed > 3:
             self.gps_speed = updated_gps_speed
             self.gps_speed_gauge.clear_note()
