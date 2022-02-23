@@ -165,13 +165,13 @@ class HatManager(HatAdapter):
             if not self.gps.has_fix:
                 # Try again if we don't have a fix yet
                 self.log.debug('Waiting for fix...')
-                self.speed = -1
+                self.gps_speed = -1
 
             # We have a fix! (gps.has_fix is true)
             elif self.gps.track_angle_deg is not None:
                     #convert knots to mph
-                    self.speed = self.gps.speed_knots*1.15078
-        if self.speed>-1:
-            self.queue_manager.gps_speed.put(self.speed)
+                    self.gps_speed = self.gps.speed_knots*1.15078
+        if self.gps_speed>-1:
+            self.queue_manager.gps_speed.put(self.gps_speed)
         else:
             self.queue_manager.gps_speed.put(-1)
