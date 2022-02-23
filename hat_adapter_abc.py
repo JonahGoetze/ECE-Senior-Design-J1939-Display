@@ -29,11 +29,17 @@ class HatAdapter(Process, ABC):
         pass
 
     def run(self):
-        self.startup_hook()
-        while not self.exit.is_set():
-            self.loop()
-            sleep(0.1)
-        self.shutdown_hook()
+        try:
+            self.startup_hook()
+            while not self.exit.is_set():
+                self.loop()
+                sleep(0.1)
+            self.shutdown_hook()
+        except Exception as e:
+            self.log.error("Unhandled exception:", e)
+            self.shutdown_hook()
+
+
 
     def stop(self):
         self.exit.set()
