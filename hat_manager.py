@@ -160,8 +160,8 @@ class HatManager(HatAdapter):
         # though if you don't care and instead look at the has_fix property).
         self.gps.update()
         current = time.monotonic()
-        if current - self.last_timestamp >= 1.0:
-            self.last_timestamp = current
+        if current - self.gps_last_timestamp >= 1.0:
+            self.gps_last_timestamp = current
             if not self.gps.has_fix:
                 # Try again if we don't have a fix yet
                 self.log.debug('Waiting for fix...')
