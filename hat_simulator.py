@@ -9,7 +9,7 @@ class HatSimulator(HatAdapter):
         self.rpm = 0
         self.temp = 0
 
-        self.max_gps_speed = 16
+        self.max_gps_speed = 60
         self.max_rpm = 4600
         self.max_temp = 250
 

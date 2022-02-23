@@ -53,6 +53,22 @@
                 pos: root.pos[0]+(root.threshold_3/root.max_value)*root.width, root.pos[1] 
                 size: (3, root.height*.75) if root.threshold_3 != 0 else (0,0)
 
+<TextGague>
+    canvas:
+        Color:
+            rgba: 0.2,0.2,0.2,1,
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    Label:
+        text: root.display_value
+        font_size: 72
+        #font_name: "DejaVuSansMono"
+        pos: root.pos[0]+320, root.pos[1]+50
+        halign: "left"
+        valign: "bottom"
+        text_size: 500, None
+
 
         
 <Root>:
@@ -96,16 +112,12 @@
         threshold_3: 4500
         max_value: 4600
 
-    Gague:
+    TextGague:
         id: gps_speed
         title: "Speed"
         center: root.width/2, root.height*.75
         size: self.parent.width*.75, 200
         
 
-        threshold_1: 0
-        threshold_2: 0
-        threshold_3: 15
-        max_value: 16
 
     

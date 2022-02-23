@@ -6,6 +6,31 @@ from kivy.uix.widget import Widget
 from kivy.properties import NumericProperty, ReferenceListProperty, ObjectProperty, ListProperty, StringProperty
 from queue_manager import QueueManager
 
+class TextGague(Widget):
+    value = NumericProperty(0)
+    note = StringProperty()
+    display_value = StringProperty()
+
+    def set_value(self, value):
+        self.value = value
+
+    def set_note(self, n):
+        self.note = n
+        self.update_display_value()
+
+    def clear_note(self):
+        self.note = ""
+        self.update_display_value()
+
+    def update_display_value(self):
+        if self.note != "":
+            self.display_value = f"{self.title}: {self.note}"
+        else:
+            self.display_value = (
+                "{0} {1:5d}".format(self.title, self.value)
+                if not isinstance(self.value, float)
+                else "{0} {1:5.2f}".format(self.title, self.value)
+            )
 
 class Gague(Widget):
     max_value = NumericProperty(1)
