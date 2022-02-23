@@ -92,7 +92,8 @@ class HatManager(HatAdapter):
             self.queue_manager.temp.put(coolnttemp)
             pass
         else:
-            self.log.trace(f"unhandled CAN Msg; {message}")
+            #self.log.trace(f"unhandled CAN Msg; {message}")
+            pass
 
             
 
