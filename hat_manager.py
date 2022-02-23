@@ -174,4 +174,4 @@ class HatManager(HatAdapter):
         if self.speed>-1:
             self.queue_manager.gps_speed.put(self.speed)
         else:
-            self.queue_manager.gps_speed.put(0)
+            self.queue_manager.gps_speed.put(-1)
