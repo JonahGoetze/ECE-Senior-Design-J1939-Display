@@ -29,16 +29,8 @@ class HatManager(HatAdapter):
         self.PGN_whitelist = [] #[PGN.EEC1, PGN.ET1, PGN.VEP1] #PGN filter
         self.PID_whitelist = [PID.EMS01, PID.EMS12]
         self.led_state = False
-        self.led_count = 0
 
     def loop(self):
-        if self.led_count < 1000:
-            self.led_count += 1
-        else:
-            self.led_state = not self.led_state
-            GPIO.output(self.led, self.led_state)
-            self.led_count = 0
-
         # check to see if we have a new can message
         try:
             message = self.can_listener.buffer.get(block=False)
@@ -46,6 +38,9 @@ class HatManager(HatAdapter):
             message = None
 
         if message is not None:
+            self.led_state = not self.led_state
+            GPIO.output(self.led, self.led_state)
+
             self.on_raw_can_message(message)
 
     def startup_hook(self):
