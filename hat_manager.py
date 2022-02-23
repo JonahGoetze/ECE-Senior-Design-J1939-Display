@@ -1,5 +1,6 @@
 from hat_adapter_abc import HatAdapter
 from queue_manager import QueueManager
+from queue import Empty
 import os
 import RPi.GPIO as GPIO
 import logging
@@ -35,11 +36,15 @@ class HatManager(HatAdapter):
             self.led_count += 1
         else:
             self.led_state = not self.led_state
-            GPIO.output(self.led,self.led_state)
+            GPIO.output(self.led, self.led_state)
             self.led_count = 0
 
         # check to see if we have a new can message
-        message = self.can_listener.buffer.get(block=False)
+        try:
+            message = self.can_listener.buffer.get(block=False)
+        except Empty:
+            message = None
+
         if message is not None:
             self.on_raw_can_message(message)
 
