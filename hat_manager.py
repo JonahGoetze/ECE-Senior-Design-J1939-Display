@@ -39,7 +39,7 @@ class HatManager(HatAdapter):
             self.led_count = 0
 
         # check to see if we have a new can message
-        message = self.can_listener.get_message(timeout=1e-10) # 0 for non-blocking
+        message = self.can_listener.buffer.get(block=False)
         if message is not None:
             self.on_raw_can_message(message)
 
