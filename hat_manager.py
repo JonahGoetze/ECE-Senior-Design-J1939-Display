@@ -88,7 +88,7 @@ class HatManager(HatAdapter):
             word = message.data[1:3]
             coolnttemp = int.from_bytes(word,byteorder="little",signed = False) # convert bytearray to int
             coolnttemp = (coolnttemp*0.625)-10
-            coolnttemp = (coolnttemp*(9/5))+32
+            #coolnttemp = (coolnttemp*(9/5))+32
             coolnttemp = round(coolnttemp,2)
             self.queue_manager.temp.put(coolnttemp)
             pass
