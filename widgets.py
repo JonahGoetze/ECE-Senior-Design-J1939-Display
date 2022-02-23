@@ -24,10 +24,10 @@ class TextGague(Widget):
 
     def update_display_value(self):
         if self.note != "":
-            self.display_value = f"{self.title}: {self.note}"
+            self.display_value = f"{self.note}"
         else:
             self.display_value = (
-                "{0}{1:5d}".format(self.title, self.value)
+                "{0}{1:3d}".format(self.title, self.value)
                 if not isinstance(self.value, float)
                 else "{0}{1:5.2f}".format(self.title, self.value)
             )
