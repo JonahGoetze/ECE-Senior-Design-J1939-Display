@@ -64,7 +64,7 @@ class Root(Widget):
         """
         # Update voltage
         updated_gps_speed = self.queue_manager.gps_speed.get_or_else(self.gps_speed)
-        self.gps_speed = updated_gps_speed if updated_gps_speed > 3 else 0
+        self.gps_speed = updated_gps_speed #if updated_gps_speed > 3 else 0
 
         # Update rpm
         self.rpm = self.queue_manager.rpm.get_or_else(self.rpm)
