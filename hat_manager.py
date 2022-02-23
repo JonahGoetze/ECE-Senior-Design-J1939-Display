@@ -4,6 +4,7 @@ import os
 import RPi.GPIO as GPIO
 import logging
 import j1939
+import can
 from enum import IntEnum
 
 class PGN (IntEnum):
@@ -27,6 +28,11 @@ class HatManager(HatAdapter):
         self.led_state = not self.led_state
         GPIO.output(self.led,self.led_state)
 
+        # check to see if we have a new can message
+        message = self.can_listener.get_message(timeout=0) # 0 for non-blocking
+        if message is not None:
+            self.on_raw_can_message(message)
+
     def startup_hook(self):
 
         logging.getLogger('j1939').setLevel(self.log_level)
@@ -48,7 +54,13 @@ class HatManager(HatAdapter):
         self.ecu.connect(bustype='socketcan', channel='can0')
 
         # subscribe to all (global) messages on the bus
-        self.ecu.subscribe(self.on_message)
+        self.ecu.subscribe(self.on_j1939_message)
+
+        # can interface setup
+        self.can_bus = can.interface.Bus()
+        self.can_listener = can.BufferedReader()
+        self.can_notifier = can.Notifier(self.can_bus, [self.can_listener])
+
 
     def shutdown_hook(self):
         self.log.info("Deinitializing")
@@ -56,7 +68,13 @@ class HatManager(HatAdapter):
         GPIO.output(self.led,False)
         os.system("sudo /sbin/ip link set can0 down")
 
-    def on_message(self, priority, pgn, sa, timestamp, data):
+        self.can_notifier.stop()
+        self.can_bus.shutdown()
+
+    def on_raw_can_message(self, message):
+        pass
+
+    def on_j1939_message(self, priority, pgn, sa, timestamp, data):
         """Receive incoming messages from the bus
 
         :param int priority:

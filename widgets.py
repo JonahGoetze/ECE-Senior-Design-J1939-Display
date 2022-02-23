@@ -46,12 +46,12 @@ class Gague(Widget):
 
 
 class Root(Widget):
-    voltage_gauge = ObjectProperty(None)
+    gps_speed_gauge = ObjectProperty(None)
     rpm_gauge = ObjectProperty(None)
     temp_gauge = ObjectProperty(None)
     count = 0
 
-    voltage = 0
+    gps_speed = 0
     rpm = 0
     coolant_temp = 0
 
@@ -63,8 +63,8 @@ class Root(Widget):
         to the event queues.
         """
         # Update voltage
-        updated_voltage = self.queue_manager.voltage.get_or_else(self.voltage)
-        self.voltage = updated_voltage if updated_voltage > 3 else 0
+        updated_gps_speed = self.queue_manager.gps_speed.get_or_else(self.gps_speed)
+        self.gps_speed = updated_gps_speed if updated_gps_speed > 3 else 0
 
         # Update rpm
         self.rpm = self.queue_manager.rpm.get_or_else(self.rpm)
@@ -72,6 +72,6 @@ class Root(Widget):
         # update temp
         self.coolant_temp = self.queue_manager.temp.get_or_else(self.coolant_temp)
 
-        self.voltage_gauge.set_value(self.voltage)
+        self.gps_speed_gauge.set_value(self.gps_speed)
         self.rpm_gauge.set_value(self.rpm)
         self.temp_gauge.set_value(self.coolant_temp)
