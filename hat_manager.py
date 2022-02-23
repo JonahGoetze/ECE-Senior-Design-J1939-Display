@@ -2,6 +2,9 @@ from hat_adapter_abc import HatAdapter
 from queue_manager import QueueManager
 from queue import Empty
 import os
+import time
+import adafruit_gps
+import serial
 import RPi.GPIO as GPIO
 import logging
 import j1939
@@ -42,6 +45,7 @@ class HatManager(HatAdapter):
             GPIO.output(self.led, self.led_state)
 
             self.on_raw_can_message(message)
+        self.update_gps()
 
     def startup_hook(self):
 
@@ -72,7 +76,16 @@ class HatManager(HatAdapter):
         self.can_bus.set_filters(can_filters)
         self.can_listener = can.BufferedReader()
         self.can_notifier = can.Notifier(self.can_bus, [self.can_listener])
+        
+        # gps setup
+        uart = serial.Serial("/dev/ttyUSB0", baudrate=9600, timeout=3000)
 
+        # Create a GPS module instance.
+        self.gps = adafruit_gps.GPS(uart, debug=False)
+        self.gps.send_command(b'PMTK314,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0')
+        self.gps.send_command(b'PMTK220,500')
+        self.gps_last_timestamp = time.monotonic()
+        self.gps_speed = -1
 
     def shutdown_hook(self):
         self.log.info("Deinitializing")
@@ -138,3 +151,27 @@ class HatManager(HatAdapter):
         else:
             pass
         #self.log.debug(f"PGN {pgn} length {len(data)} Data {data.hex()}")
+
+
+    def update_gps(self):
+        # Make sure to call gps.update() every loop iteration and at least twice
+        # as fast as data comes from the GPS unit (usually every second).
+        # This returns a bool that's true if it parsed new data (you can ignore it
+        # though if you don't care and instead look at the has_fix property).
+        self.gps.update()
+        current = time.monotonic()
+        if current - self.last_timestamp >= 1.0:
+            self.last_timestamp = current
+            if not self.gps.has_fix:
+                # Try again if we don't have a fix yet
+                self.log.debug('Waiting for fix...')
+                self.speed = -1
+
+            # We have a fix! (gps.has_fix is true)
+            elif self.gps.track_angle_deg is not None:
+                    #convert knots to mph
+                    self.speed = self.gps.speed_knots*1.15078
+        if self.speed>-1:
+            self.queue_manager.gps_speed.put(self.speed)
+        else:
+            self.queue_manager.gps_speed.put(0)
