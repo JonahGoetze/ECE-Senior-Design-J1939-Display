@@ -93,7 +93,7 @@ class Root(Widget):
             self.gps_speed = updated_gps_speed
             self.gps_speed_gauge.clear_note()
         else:
-            self.gps_speed = updated_gps_speed  #0
+            self.gps_speed = 0
             self.gps_speed_gauge.clear_note()
 
         # Update rpm
