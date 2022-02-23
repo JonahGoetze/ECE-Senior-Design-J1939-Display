@@ -90,12 +90,13 @@ class HatManager(HatAdapter):
             engspd = round(engspd) 
             self.queue_manager.rpm.put(engspd)
         elif message.arbitration_id == PID.EMS12:
-            word = message.data[1:2]
+            coolnttemp = message.data[1:2]
+            #word = message.data[1:2]
             #self.log.debug(f"test:{word.hex()}")
-            coolnttemp = int.from_bytes(word,byteorder="big",signed = False) # convert bytearray to int
+            #coolnttemp = int.from_bytes(word,byteorder="big",signed = False) # convert bytearray to int
             coolnttemp = (coolnttemp*0.625)-10
             #coolnttemp = (coolnttemp*(9/5))+32
-            coolnttemp = round(coolnttemp,2)
+            #coolnttemp = round(coolnttemp,2)
             self.queue_manager.temp.put(coolnttemp)
             pass
         else:
