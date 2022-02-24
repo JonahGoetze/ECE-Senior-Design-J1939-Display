@@ -54,20 +54,33 @@
                 size: (3, root.height*.75) if root.threshold_3 != 0 else (0,0)
 
 <TextGague>
-    canvas:
-        Color:
-            rgba: 0.2,0.2,0.2,1,
-        Rectangle:
-            pos: self.pos
-            size: self.size
-    Label:
-        text: root.display_value
-        font_size: 200
-        #font_name: "DejaVuSansMono"
-        pos: root.pos[0]+470, root.pos[1]+50
-        halign: "left"
-        valign: "bottom"
-        text_size: 1000, None
+    size: 580, 200
+
+    RelativeLayout:
+        size_hint: None, None
+        pos: root.pos
+        canvas:
+            Color:
+                rgba: 0.2,0.2,0.2,1,
+            Rectangle:
+                size: root.size
+        Label:
+            text: root.title
+            font_size: 80
+            #font_name: "DejaVuSansMono"
+            size: self.texture_size
+            text_size: root.width, None
+            halign: 'right'
+            right: 230
+        Label:
+            text: root.display_value
+            font_size: 200
+            #font_name: "DejaVuSansMono"
+            size: self.texture_size
+            text_size: root.width, None
+            halign: 'right'
+            right: 50
+            top: 40
 
 
         
@@ -115,9 +128,8 @@
     TextGague:
         id: gps_speed
         title: "MPH"
-        center: root.width/2, root.height*.75
-        size: self.parent.width*.95, 200
-        
+        center: root.width/2, root.height*0.75
+
 
 
     
