@@ -64,11 +64,19 @@ class TextGagueSmall(Widget):
         if self.note != "":
             self.display_value = self.note
         else:
-            if self.truncate_precision == -1:
-                value = self.value
+            if isinstance(self.value, int):
+                if self.truncate_precision == -1:
+                    value = self.value
+                else:
+                    value = round(self.value, -1*self.truncate_precision)
+                self.display_value = f"{value:{self.value_padding}d}"
             else:
-                value = round(self.value, -1*self.truncate_precision)
-            self.display_value = f"{value:{self.value_padding}d}"
+                if self.truncate_precision == -1:
+                    value = self.value
+                else:
+                    value = round(self.value, self.truncate_precision)
+                self.display_value = f"{value:.{self.truncate_precision}f}"
+
 
     def update_border(self):
         percent = self.value / self.max_value

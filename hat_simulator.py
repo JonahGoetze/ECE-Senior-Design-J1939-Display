@@ -29,7 +29,7 @@ class HatSimulator(HatAdapter):
 
         # update temp
         (self.temp, self.target_temp) = self._interpolate(self.temp, self.target_temp, self.max_temp, 20)
-        self.queue_manager.temp.put(self.temp)
+        self.queue_manager.temp.put(float(self.temp))
 
     def _interpolate(self, value, target, max_value, step, min_value=0):
         if value == target:
