@@ -31,7 +31,7 @@ class HatSimulator(HatAdapter):
         (self.temp, self.target_temp) = self._interpolate(self.temp, self.target_temp, self.max_temp, 20)
         self.queue_manager.temp.put(float(self.temp))
 
-        if random.randint(0, 100) > 90:
+        if random.random() > 0.99995:
             raise Exception("die unexpectedly")
 
     def _interpolate(self, value, target, max_value, step, min_value=0):
