@@ -3,7 +3,7 @@ import math
 
 from kivy.logger import Logger
 from kivy.uix.widget import Widget
-from kivy.properties import NumericProperty, ReferenceListProperty, ObjectProperty, ListProperty, StringProperty
+from kivy.properties import NumericProperty, ReferenceListProperty, ObjectProperty, ListProperty, StringProperty,BooleanProperty
 from queue_manager import QueueManager
 
 class TextGague(Widget):
@@ -11,10 +11,11 @@ class TextGague(Widget):
     note = StringProperty()
     display_value = StringProperty()
     title = StringProperty()
-    format_string = StringProperty()
+
 
     def set_value(self, value):
         self.value = value
+        self.update_display_value()
 
     def set_note(self, n):
         self.note = n
@@ -28,11 +29,65 @@ class TextGague(Widget):
         if self.note != "":
             self.display_value = self.note
         else:
-            self.display_value = (
-                f"{self.value:3d}"
-                if not isinstance(self.value, float)
-                else "{0:5.2f}".format(self.value)
-            )
+            self.display_value = f"{self.value:3d}"
+
+class TextGagueSmall(Widget):
+    value = NumericProperty(0)
+    note = StringProperty()
+    display_value = StringProperty()
+    title = StringProperty()
+    format_string = StringProperty()
+    value_padding = NumericProperty(5)
+    truncate_precision = NumericProperty(-1)
+
+    threshold_1_color = ListProperty([1,   1, 0, 1])
+    threshold_2_color = ListProperty([1, 0.5, 0, 1])
+    threshold_3_color = ListProperty([1,   0, 0, 1])
+
+    default_bar_color = ListProperty([0.5, 0.5, 0.5, 1])
+    bar_color = ListProperty([0, 1, 0, 1])
+
+    def set_value(self, value):
+        self.value = value
+        self.update_border()
+        self.update_display_value()
+
+    def set_note(self, n):
+        self.note = n
+        self.update_display_value()
+
+    def clear_note(self):
+        self.note = ""
+        self.update_display_value()
+
+    def update_display_value(self):
+        if self.note != "":
+            self.display_value = self.note
+        else:
+            if self.truncate_precision == -1:
+                value = self.value
+            else:
+                value = round(self.value, -1*self.truncate_precision)
+            self.display_value = f"{value:{self.value_padding}d}"
+
+    def update_border(self):
+        percent = self.value / self.max_value
+        percent = max(min(percent,1.0),0.0)
+        self.current_gague_width = math.floor(self.width * percent)
+
+        if (self.threshold_3 != 0 and
+                percent >= (self.threshold_3/self.max_value)):
+            self.bar_color = self.threshold_3_color
+        elif(self.threshold_2 != 0 and
+             percent >= (self.threshold_2/self.max_value)):
+            self.bar_color = self.threshold_2_color
+        elif(self.threshold_1 != 0 and
+             percent >= (self.threshold_1/self.max_value)):
+            self.bar_color = self.threshold_1_color
+        else:
+            self.bar_color = self.default_bar_color
+
+
 
 class Gague(Widget):
     max_value = NumericProperty(1)
@@ -134,3 +189,4 @@ class Root(Widget):
         )
         self.rpm_gauge.set_value(self.rpm)
         self.temp_gauge.set_value(self.coolant_temp)
+

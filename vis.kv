@@ -1,57 +1,5 @@
 #:kivy 1.0.9
 
-<Gague>:    
-    
-    canvas:
-        Color:
-            rgba: 0.2,0.2,0.2,1,
-        Rectangle:
-            pos: self.pos
-            size: self.size
-    Label:
-        text: root.display_value
-        font_size: 24
-        #font_name: "DejaVuSansMono"
-        pos: root.pos[0]+120, root.pos[1]-5
-        halign: "left"
-        valign: "bottom"
-        text_size: 300, None
-
-    Widget:
-        canvas:
-            Color:
-                rgba: 0.3,0.3,0.3,1,
-            Rectangle:
-                pos: root.pos[0], root.pos[1] 
-                size: root.width, root.height*.5
-    Widget:
-        canvas:
-            Color:
-                rgb: root.bar_color
-            Rectangle:
-                pos: root.pos[0], root.pos[1] 
-                size: root.current_gague_width, root.height*.5
-    Widget:
-        canvas:
-            Color:
-                rgb: 0.7, 0.7, 0.7
-            Rectangle:
-                pos: root.pos[0]+(root.threshold_1/root.max_value)*root.width, root.pos[1] 
-                size: (3, root.height*.75) if root.threshold_1 != 0 else (0,0)
-    Widget:
-        canvas:
-            Color:
-                rgb: 0.7, 0.7, 0.7
-            Rectangle:
-                pos: root.pos[0]+(root.threshold_2/root.max_value)*root.width, root.pos[1] 
-                size: (3, root.height*.75) if root.threshold_2 != 0 else (0,0)
-    Widget:
-        canvas:
-            Color:
-                rgb: 0.7, 0.7, 0.7
-            Rectangle:
-                pos: root.pos[0]+(root.threshold_3/root.max_value)*root.width, root.pos[1] 
-                size: (3, root.height*.75) if root.threshold_3 != 0 else (0,0)
 
 <TextGague>
     size: 580, 200
@@ -67,7 +15,6 @@
         Label:
             text: root.title
             font_size: 80
-            #font_name: "DejaVuSansMono"
             size: self.texture_size
             text_size: root.width, None
             halign: 'right'
@@ -75,12 +22,44 @@
         Label:
             text: root.display_value
             font_size: 200
-            #font_name: "DejaVuSansMono"
             size: self.texture_size
             text_size: root.width, None
             halign: 'right'
             right: 50
             top: 40
+
+<TextGagueSmall>
+    size: 340, 220
+
+    RelativeLayout:
+        size_hint: None, None
+        pos: root.pos
+        canvas:
+            Color:
+                rgba: 0.2,0.2,0.2,1,
+            Rectangle:
+                size: root.size
+            Color:
+                rgba: root.bar_color
+            Line:
+                width: 2
+                rectangle: 0, 0, root.width, root.height
+        Label:
+            text: root.title
+            font_size: 40
+            #size: 10, 10 #self.texture_size
+            text_size: root.width, None
+            halign: 'center'
+            center_x: root.width/2
+            center_y : 180
+
+        Label:
+            text: root.display_value
+            font_size: 120
+            #size: self.texture_size
+            text_size: root.width, None
+            halign: 'right'
+            center_x: root.width/2 - 10
 
 
         
@@ -103,22 +82,22 @@
         on_press: app.stop()
         center: 0,0
 
-    Gague:
+    TextGagueSmall:
         id: temp
-        title: "Coolant Temp"
+        title: "Coolant Temp °F"
         center: (root.width/4)*3, root.height*.25
-        size: self.parent.width*.35, 60
 
         threshold_1: 0
         threshold_2: 215
         threshold_3: 230
         max_value: 250
 
-    Gague:
+    TextGagueSmall:
         id: rpm
         title: "RPM"
         center: root.width/4, root.height*.25
-        size: self.parent.width*.35, 60
+
+        truncate_precision: 1
 
         threshold_1: 0
         threshold_2: 4250
