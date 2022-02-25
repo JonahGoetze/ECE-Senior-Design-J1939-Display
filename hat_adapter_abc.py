@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from multiprocessing import Process, Event
 from time import sleep
 from queue_manager import QueueManager
+import logging
 
 
 class HatAdapter(Process, ABC):
@@ -10,6 +11,9 @@ class HatAdapter(Process, ABC):
         super(ABC, self).__init__()
         self.exit = Event()
         self.queue_manager = queue_manager
+        self.log_level = logging.INFO # change to INFO for normal use, DEBUG for testing purposes
+        self.log = logging.getLogger("hat_adapter_abc")
+        self.log.setLevel(self.log_level)
 
     def startup_hook(self):
         """
@@ -29,15 +33,15 @@ class HatAdapter(Process, ABC):
         pass
 
     def run(self):
-        try:
-            self.startup_hook()
-            while not self.exit.is_set():
-                self.loop()
-            self.shutdown_hook()
-        except Exception as e:
-            self.log.error("Unhandled exception:", e)
-            self.shutdown_hook()
-
+        while not self.exit.is_set():
+            try:
+                self.startup_hook()
+                while not self.exit.is_set():
+                    self.loop()
+                self.shutdown_hook()
+            except Exception as e:
+                self.log.exception(f"Unhandled exception: {e}")
+                self.shutdown_hook()
 
 
     def stop(self):
