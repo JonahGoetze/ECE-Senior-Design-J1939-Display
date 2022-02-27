@@ -105,7 +105,7 @@ class HatManager(HatAdapter):
         elif message.arbitration_id == PID.EMS12:
             coolnttemp = message.data[0]
             coolnttemp = (coolnttemp*0.625)-10
-            coolnttemp = (coolnttemp*(9/5))+32
+            #coolnttemp = (coolnttemp*(9/5))+32 Degree C to F Conversion
             coolnttemp = round(coolnttemp,2)
             self.queue_manager.temp.put(coolnttemp)
             pass
@@ -139,7 +139,7 @@ class HatManager(HatAdapter):
             self.queue_manager.rpm.put(engspd)
         elif pgn == PGN.ET1:
             coolnttemp = data[0]
-            coolnttemp = (coolnttemp*(9/5))+32
+            #coolnttemp = (coolnttemp*(9/5))+32 Degree C to F Conversion
             coolnttemp = round(coolnttemp,1)
             self.queue_manager.temp.put(coolnttemp)
         elif pgn == PGN.VEP1:
@@ -172,6 +172,6 @@ class HatManager(HatAdapter):
                     #convert knots to mph
                     self.gps_speed = self.gps.speed_knots*1.15078
         if self.gps_speed>-1:
-            self.queue_manager.gps_speed.put(self.gps_speed)
+            self.queue_manager.gps_speed.put(round(self.gps_speed))
         else:
             self.queue_manager.gps_speed.put(-1)
